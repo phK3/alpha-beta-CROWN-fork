@@ -83,7 +83,7 @@ easily into a conda environment. If you don't have conda, you can install
 
 Clone our verifier including the [auto_LiRPA](https://github.com/Verified-Intelligence/auto_LiRPA) submodule:
 ```bash
-git clone --recursive https://github.com/Verified-Intelligence/alpha-beta-CROWN.git
+git clone --recursive https://github.com/phK3/alpha-beta-CROWN-fork.git
 ```
 
 Setup the conda environment:
@@ -91,9 +91,9 @@ Setup the conda environment:
 # Remove the old environment, if necessary.
 conda deactivate; conda env remove --name alpha-beta-crown
 # install all dependents into the alpha-beta-crown environment
-conda env create -f complete_verifier/environment.yaml --name alpha-beta-crown
+conda env create -f complete_verifier/environment.yaml --name abcrown-fork
 # activate the environment
-conda activate alpha-beta-crown
+conda activate abcrown-fork
 ```
 
 If you use the CROWN, α-CROWN and/or β-CROWN verifiers (which cover the most use
@@ -123,7 +123,7 @@ for the verifier are defined in a `yaml` config file. For example, to run
 robustness verification on a CIFAR-10 ResNet network, you just run:
 
 ```bash
-conda activate alpha-beta-crown  # activate the conda environment
+conda activate abcrown-fork  # activate the conda environment
 cd complete_verifier
 python abcrown.py --config exp_configs/tutorial_examples/cifar_resnet_2b.yaml
 ```
