@@ -139,7 +139,7 @@ The list a list containing 2-tuples:
 >rhs: array([0., 0., 0., 0.])<br>
 >--> mat * y <= rhs<br>
 >So, -Y_0 + Y_1 <= 0, -Y_0 + Y_2 <= 0, -Y_0 + Y_3 <= 0, -Y_0 + Y_4 <= 0<br>
->Or, Y_1 <= Y_0, Y_1 <= Y_2, Y_1 <= Y_3, Y_1 <= Y_4<br>
+>Or, Y_1 <= Y_0, Y_2 <= Y_0, Y_3 <= Y_0, Y_4 <= Y_0<br>
 
 
 3. For `./test_vnnlib/little3.vnnlib`:
@@ -293,7 +293,7 @@ The list a list containing 2-tuples:
 )]
 ```
 -**Output Explanation**:
->Note that since we defined X_? values in assertion, we reflect this constriction on  X ranges. If this definition can constrain X's original range, >we shorten the X range. If not, skip.<br>
+>Note that since we defined X_? values in assertion, we reflect this constriction on X ranges. If this definition can constrain X's original range, >we shorten the X range. If not, skip.<br>
 
 >In our case, X_range should be:<br>
 >[[0.6, 0.679857769], [-0.5, 0.5], [-0.5, 0.5], [0.45, 0.5], [-0.5, -0.45]]<br>

@@ -1,10 +1,10 @@
 #########################################################################
 ##   This file is part of the α,β-CROWN (alpha-beta-CROWN) verifier    ##
 ##                                                                     ##
-##   Copyright (C) 2021-2024 The α,β-CROWN Team                        ##
-##   Primary contacts: Huan Zhang <huan@huan-zhang.com>                ##
-##                     Zhouxing Shi <zshi@cs.ucla.edu>                 ##
-##                     Kaidi Xu <kx46@drexel.edu>                      ##
+##   Copyright (C) 2021-2025 The α,β-CROWN Team                        ##
+##   Primary contacts: Huan Zhang <huan@huan-zhang.com> (UIUC)         ##
+##                     Zhouxing Shi <zshi@cs.ucla.edu> (UCLA)          ##
+##                     Xiangru Zhong <xiangru4@illinois.edu> (UIUC)    ##
 ##                                                                     ##
 ##    See CONTRIBUTORS for all author contacts and affiliations.       ##
 ##                                                                     ##
@@ -19,7 +19,6 @@ import torch
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from beta_CROWN_solver import LiRPANet
-
 
 class NeuronBranchingHeuristic():
     """Base class for branching heuristics."""
@@ -39,7 +38,7 @@ class NeuronBranchingHeuristic():
                 yield key, bounds[key]
 
     def update_batch_size_and_device(self, bounds):
-        """Set self.batch_size and self.device based on intermeidate bounds."""
+        """Set self.batch_size and self.device based on intermediate bounds."""
         assert isinstance(bounds, dict)
         first_bounds = bounds[list(bounds.keys())[0]]
         self.batch_size = first_bounds.size(0)
@@ -47,7 +46,7 @@ class NeuronBranchingHeuristic():
 
     def get_branching_decisions(self, domains, split_depth=1, **kwargs):
         r"""
-        Get branching decisions given intermediat layer bounds and a mask
+        Get branching decisions given intermediate layer bounds and a mask
         indicating which neurons are "splittable".
 
         Args:
@@ -91,6 +90,7 @@ class NeuronBranchingHeuristic():
             score += split_masks[idx] * 1e-10
         topk_neuron_layers, topk_neuron_indices = self.find_topk_scores(
             layer_scores, split_masks, split_depth)
+
         # TODO need to return the branching point
         return self.format_decisions(topk_neuron_layers, topk_neuron_indices)
 
@@ -160,7 +160,7 @@ class NeuronBranchingHeuristic():
                 # Update the number of valid scores based on the mask.
                 max_valid_scores += mask.sum(dim=1)
         # Since all elements in this batch must have the same split depth, we
-        # take the minumum.
+        # take the minimum.
         max_k = int(max_valid_scores.min().item())
         ret = (topk_neuron_layers[:, :max_k], topk_neuron_indices[:, :max_k])
         if return_scores:
@@ -206,14 +206,13 @@ class NeuronBranchingHeuristic():
 
 
 class RandomNeuronBranching(NeuronBranchingHeuristic):
-    """Randomly chooise k neurons among all layers."""
+    """Randomly choose k neurons among all layers."""
 
     def compute_neuron_scores(self, domains, **kwargs):
         scores = {}
         for idx, lb in self.layer_iterator(domains['lower_bounds']):
             # Random score 0 - 1.
-            scores[idx] = (domains['mask'][self.net.split_indices[idx]]
-                           * torch.rand_like(lb)).flatten(1)
+            scores[idx] = domains['mask'][idx] * torch.rand_like(lb).flatten(1)
         return scores
 
 

@@ -1,10 +1,10 @@
 #########################################################################
 ##   This file is part of the α,β-CROWN (alpha-beta-CROWN) verifier    ##
 ##                                                                     ##
-##   Copyright (C) 2021-2024 The α,β-CROWN Team                        ##
-##   Primary contacts: Huan Zhang <huan@huan-zhang.com>                ##
-##                     Zhouxing Shi <zshi@cs.ucla.edu>                 ##
-##                     Kaidi Xu <kx46@drexel.edu>                      ##
+##   Copyright (C) 2021-2025 The α,β-CROWN Team                        ##
+##   Primary contacts: Huan Zhang <huan@huan-zhang.com> (UIUC)         ##
+##                     Zhouxing Shi <zshi@cs.ucla.edu> (UCLA)          ##
+##                     Xiangru Zhong <xiangru4@illinois.edu> (UIUC)    ##
 ##                                                                     ##
 ##    See CONTRIBUTORS for all author contacts and affiliations.       ##
 ##                                                                     ##
@@ -209,7 +209,7 @@ def split_carvana(path):
 def customized_NN4SYS_loader(file_root, onnx_path, vnnlib_path):
     """
     Customized NN4SYS loader.
-    We split split the model into v1 and v2 models to resolve numerical issues
+    We split the model into v1 and v2 models to resolve numerical issues
     """
 
     def get_path(onnx_file):

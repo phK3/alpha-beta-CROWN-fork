@@ -1,10 +1,10 @@
 #########################################################################
 ##   This file is part of the α,β-CROWN (alpha-beta-CROWN) verifier    ##
 ##                                                                     ##
-##   Copyright (C) 2021-2024 The α,β-CROWN Team                        ##
-##   Primary contacts: Huan Zhang <huan@huan-zhang.com>                ##
-##                     Zhouxing Shi <zshi@cs.ucla.edu>                 ##
-##                     Kaidi Xu <kx46@drexel.edu>                      ##
+##   Copyright (C) 2021-2025 The α,β-CROWN Team                        ##
+##   Primary contacts: Huan Zhang <huan@huan-zhang.com> (UIUC)         ##
+##                     Zhouxing Shi <zshi@cs.ucla.edu> (UCLA)          ##
+##                     Xiangru Zhong <xiangru4@illinois.edu> (UIUC)    ##
 ##                                                                     ##
 ##    See CONTRIBUTORS for all author contacts and affiliations.       ##
 ##                                                                     ##
@@ -141,7 +141,7 @@ class BoundLinearMaskedRelu(BoundRelu):
 
     def bound_backward(self, last_lA, last_uA, x, mask, slope, bias, **kwargs):
         """Backward LiRPA (CROWN) bound propagation."""
-        # These are additional variabels that will be used in _backward_relaxation(), so we save them here.
+        # These are additional variables that will be used in _backward_relaxation(), so we save them here.
         self._mask = mask.buffer  # These are registered as buffers; see class BoundBuffer.
         self._slope = slope.buffer
         self._bias = bias.buffer

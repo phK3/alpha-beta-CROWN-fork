@@ -1,10 +1,10 @@
 #########################################################################
 ##   This file is part of the α,β-CROWN (alpha-beta-CROWN) verifier    ##
 ##                                                                     ##
-##   Copyright (C) 2021-2024 The α,β-CROWN Team                        ##
-##   Primary contacts: Huan Zhang <huan@huan-zhang.com>                ##
-##                     Zhouxing Shi <zshi@cs.ucla.edu>                 ##
-##                     Kaidi Xu <kx46@drexel.edu>                      ##
+##   Copyright (C) 2021-2025 The α,β-CROWN Team                        ##
+##   Primary contacts: Huan Zhang <huan@huan-zhang.com> (UIUC)         ##
+##                     Zhouxing Shi <zshi@cs.ucla.edu> (UCLA)          ##
+##                     Xiangru Zhong <xiangru4@illinois.edu> (UIUC)    ##
 ##                                                                     ##
 ##    See CONTRIBUTORS for all author contacts and affiliations.       ##
 ##                                                                     ##
@@ -62,7 +62,7 @@ def load_verification_dataset():
     # FIXME (01/10/22): fully document customized data loader.
     # Returns: X, labels, runnerup, data_max, data_min, eps, target_label.
     # X is the data matrix in (batch, ...).
-    # labels are the groud truth labels, a tensor of integers.
+    # labels are the ground truth labels, a tensor of integers.
     # runnerup is the runnerup label used for quickly verify against the runnerup (second largest) label, can be set to None.
     # data_max is the per-example perturbation upper bound, shape (batch, ...) or (1, ...).
     # data_min is the per-example perturbation lower bound, shape (batch, ...) or (1, ...).
@@ -126,10 +126,14 @@ def load_model_and_vnnlib(file_root, csv_item):
 def adhoc_tuning(data_min, data_max, model_ori):
     if 'vgg' in arguments.Config['general']['root_path']:
         perturbed = (data_max - data_min > 0).sum()
+        print('Number of perturbed inputs:', int(perturbed))
         if perturbed > 10000:
             print('WARNING: prioritizing attack due to too many perturbed pixels on VGG')
             print('Setting arguments.Config["attack"]["pgd_order"] to "before"')
             arguments.Config['attack']['pgd_order'] = 'before'
+        if perturbed > 100:
+            print('Setting bound_prop_method to crown')
+            arguments.Config['solver']['bound_prop_method'] = 'crown'
 
     if 'nn4sys' in arguments.Config['general']['root_path']:
         if data_max.shape == torch.Size([1, 1]):
@@ -159,7 +163,7 @@ def parse_run_mode():
         csv_path = os.path.join(file_root, arguments.Config['general']['csv_name'])
         with open(csv_path, newline='') as csv_f:
             reader = csv.reader(csv_f, delimiter=',')
-            # In VNN-COMP each line of the csv containts 3 elements: model, vnnlib, timeout
+            # In VNN-COMP each line of the csv contains 3 elements: model, vnnlib, timeout
             csv_file = [row for row in reader]
 
         if len(csv_file[0]) == 1:
