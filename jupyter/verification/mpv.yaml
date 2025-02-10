@@ -1,0 +1,17 @@
+# Configuration file for maxpool verification (mpv) 6x50 model.
+general:
+  root_path: ../jupyter/verification
+  csv_name: specs/mpv2x2.csv
+  device: cpu
+  results_file: mpv2x2_6x50_results.txt
+  output_file: mpv2x2_6x50_out.pkl
+  double_fp: true
+  save_output: true
+model:
+  input_shape: [-1, 4, 2, 2]  # (l, u, alpha, x) for all of the 2x2 inputs
+solver:
+  alpha-crown:
+    iteration: 100  # named init_iteration in arguments.py
+    share_alphas: true
+attack:
+  pgd_order: skip
