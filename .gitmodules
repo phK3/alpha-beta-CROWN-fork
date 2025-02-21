@@ -1,3 +1,4 @@
 [submodule "auto_LiRPA"]
 	path = auto_LiRPA
-	url = https://github.com/Verified-Intelligence/auto_LiRPA.git
+	url = https://github.com/phK3/auto_LiRPA-fork.git 
+	branch = phK3changes
