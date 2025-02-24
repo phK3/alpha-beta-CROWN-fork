@@ -161,7 +161,7 @@ def train_loop(net, train_dataloader, val_dataloader, patience=10, num_epochs=10
         val_losses.append(val_loss)
         val_maes.append(val_mae)
 
-        print(f"Epoch [{epoch + 1}/{num_epochs}] - train_loss: {train_loss:.4f}, val_loss: {val_loss:.4f}, train_mae: {train_mae:.4f}, val_mae: {val_mae:.4f}")
+        print(f"Epoch [{epoch + 1}/{num_epochs}] - train_loss: {train_loss:.6f}, val_loss: {val_loss:.6f}, train_mae: {train_mae:.6f}, val_mae: {val_mae:.6f}")
 
         if val_loss < best_val_loss:
             best_val_loss = val_loss
@@ -179,22 +179,26 @@ def train_loop(net, train_dataloader, val_dataloader, patience=10, num_epochs=10
 
 
 if __name__ == "__main__":
-    CREATE_DATASET = False
-    train_size = 100
-    val_size = 10
+    CREATE_DATASET = True
+    train_size = 1_000_000
+    val_size = 100_000
     batch_size = 32
     h = 2
     w = 2
     n_neurons = 50
-    timeout = 10
-    patience = 5000
-    num_epochs = 1000
+    timeout = 172_800
+    patience = sys.maxsize
+    num_epochs = sys.maxsize
+
+    print(f"--- running experiment for (h, w) = {(h, w)} and timeout of {timeout} sec")
 
     if CREATE_DATASET:
+        print(f"-- creating dataset with {train_size} training and {val_size} validation samples") 
         ds_train, ds_val = create_tensor_dataset(train_size, val_size, h, w)
         torch.save(ds_train, './datasets/maxpool2x2_train_clean.pth')
         torch.save(ds_val, './datasets/maxpool2x2_val_clean.pth')
     else:
+        print("-- loading dataset")
         ds_train = torch.load('./datasets/maxpool2x2_train_clean.pth')
         ds_val   = torch.load('./datasets/maxpool2x2_val_clean.pth')
 
@@ -213,6 +217,7 @@ if __name__ == "__main__":
     
     train_losses, val_losses, train_maes, val_maes, best_state = train_loop(net, train_dataloader, val_dataloader, 
                                                                             timeout=timeout, patience=patience, num_epochs=num_epochs)
-    
+
+    torch.save(best_state, './net_overfit_best_state.pth')
     torch.save(train_losses, './train_losses.pth')
     torch.save(val_losses, './val_losses.pth')
